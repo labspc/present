@@ -1,0 +1,87 @@
+---
+interface Props {
+    title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="我的日记图片博客" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <slot />
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const images = document.querySelectorAll('img.zoomable');
+                images.forEach(img => {
+                    img.addEventListener('click', () => {
+                        if (img.style.transform === 'scale(1.5)') {
+                            img.style.transform = 'scale(1)';
+                        } else {
+                            img.style.transform = 'scale(1.5)';
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
+<style is:global>
+    :root {
+        --accent: 64, 116, 52;
+        --text-color: #333;
+        --bg-color: #f7f7f7;
+    }
+    html {
+        font-family: 'Noto Serif SC', serif;
+        background: var(--bg-color);
+        color: var(--text-color);
+    }
+    body {
+        margin: 0;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+    h1, h2, h3 {
+        color: rgb(var(--accent));
+    }
+    img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    img.zoomable {
+        transition: transform 0.2s ease-in-out;
+        cursor: zoom-in;
+    }
+    img.zoomable:hover {
+        transform: scale(1.5);
+        cursor: zoom-out;
+    }
+    video {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    a {
+        color: rgb(var(--accent));
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    a:hover {
+        color: rgba(var(--accent), 0.8);
+    }
+</style>

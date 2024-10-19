@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 7);  // 只显示最新的7篇文章
+---
+
+<Layout title="Present">
+    <main>
+        <h1>我的日记图片博客</h1>
+        <h2>记录📝当下一瞬 体悟❤️生命情感</h2> <!-- 副标题 -->
+		<p class="blog-intro">
+			让我们活在这个世界上，让我们站在大地上的，
+			绝不是我们头脑的理性，而是生命情感。
+			--王德峰《人文沿演讲录》
+		</p> <!-- 博客介绍 -->
+        <nav>
+            <a href="/archive">查看归档</a>
+        </nav>
+        {posts.length > 0 ? (
+            <ul>
+                {posts.map((post) => (
+                    <li>
+                        <a href={`/blog/${post.slug}`}>
+                            <article>
+                                <h2>{post.data.title}</h2>
+                                <p class="date">{post.data.date.toLocaleDateString('zh-CN')}</p>
+                                {post.data.image && <img src={post.data.image} alt={post.data.title} />}
+                            </article>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        ) : (
+            <p>暂无日记。</p>
+        )}
+    </main>
+    <footer>
+        <p>&copy; {new Date().getFullYear()} 我的日记图片博客. 保留所有权利。</p>
+    </footer>
+</Layout>
+
+<style>
+    main {
+        padding: 1rem;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    li {
+        margin-bottom: 2rem;
+    }
+    article {
+        background: white;
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        margin-top: 0;
+    }
+    .date {
+        color: #666;
+        font-style: italic;
+    }
+    img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 1rem;
+    }
+    footer {
+        text-align: center;
+        padding: 1rem;
+        background: #f8f8f8;
+        border-top: 1px solid #e7e7e7;
+        margin-top: 2rem;
+    }
+    .blog-intro {
+        margin: 1rem 0;
+        padding: 1rem;
+        background: #f8f8f8;
+        border: 1px solid #e7e7e7;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav {
+        margin-bottom: 2rem; /* 增加与博客介绍之间的间距 */
+    }
+    ul {
+        margin-top: 2rem; /* 增加与导航栏之间的间距 */
+    }
+</style>
